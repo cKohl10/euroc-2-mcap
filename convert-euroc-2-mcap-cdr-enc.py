@@ -1,3 +1,8 @@
+# This script is used to convert the Euroc dataset to MCAP format
+# Author: Carson Kohlbrenner
+# Date: 2025-06-27
+
+
 import foxglove
 import argparse
 import os
