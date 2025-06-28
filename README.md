@@ -1,4 +1,5 @@
-# Outline
+# Foxglove SLAM Vizualization
+Foxglove is a data visualization app that streamlines multimodal robotics workflows through the universal [MCAP](https://mcap.dev/) data format. Please refer to the original article [here](TODO). In this tutorial, we will convert the EuRoC MAV dataset, one of the most pominent and standardized simultaneous localization and mapping (SLAM) datasets, to MCAP format and visualize it through the [Foxglove Web App](https://app.foxglove.dev)
 ![Foxglove Euroc Viz](imgs/far.png)
 
 ## Sections
