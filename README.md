@@ -1,4 +1,6 @@
 # Outline
+![Foxglove Euroc Viz](imgs/far.png)
+
 ## Sections
  - Intro to the dataset and mcap
  - Describe the flow of the article

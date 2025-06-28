@@ -1,6 +1,8 @@
 # Custom ROS2 launch files with drone URDF
 These files are intended to be copied into a ROS2 package to launch the full EuRoC visualization demo! The urdf and meshes used for this vizualization are ported from [RotorS](https://github.com/ethz-asl/rotors_simulator) to work with ROS2. Please refer to ["RotorS---A Modular Gazebo MAV Simulator Framework"](https://link.springer.com/chapter/10.1007/978-3-319-26054-9_23) to learn more. It is assumed you already have a working instillation of ROS2. This repo was tested on ROS2 Humble. Make sure you have already installed the prerequisites found [here](../README.md)
 
+![RotorS drone](../imgs/close.png)
+
 ## First, make a new package
 ```bash
 cd ros2_ws/src
