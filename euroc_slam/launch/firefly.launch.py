@@ -11,7 +11,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     
     # Generate URDF from xacro file (or read URDF file)
-    urdf_file = PathJoinSubstitution([FindPackageShare('rotors_description'), 'urdf', 'firefly.xacro'])
+    urdf_file = PathJoinSubstitution([FindPackageShare('euroc_slam'), 'urdf', 'firefly.xacro'])
     robot_description = ParameterValue(Command(['xacro ', urdf_file, ' namespace:=firefly']), value_type=str)
 
     # Create nodes
@@ -39,7 +39,7 @@ def generate_launch_description():
     )
 
     firefly_state_publisher_node = Node(
-       package='rotors_description',
+       package='euroc_slam',
        executable='firefly_state_publisher',
        name='firefly_state_publisher',
        output='screen'

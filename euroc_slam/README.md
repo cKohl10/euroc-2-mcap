@@ -11,7 +11,7 @@ cd euroc_slam
 ```
 Next, copy the contents of this folder to your new package
 ```bash
-cp ~/euroc-2-mcap ~/ros2_ws/src/euroc_slam
+cp -a ~/euroc-2-mcap/euroc_slam/. ~/ros2_ws/src/euroc_slam
 ```
 Configure the setup.py file to see the models and launch files
 ```python
