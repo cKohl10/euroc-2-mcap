@@ -257,9 +257,11 @@ ros2 pkg create --build-type ament_python --license Apache-2.0 euroc_slam
 
 The EuRoC dataset was recorded on an Asctec Firefly drone and its URDF model is included in the open source [RotorS](https://github.com/ethz-asl/rotors_simulator) project for ROS1. The exact URDF files and meshes for the Firefly can be downloaded [here](https://github.com/cKohl10/euroc-2-mcap/tree/main/euroc_slam).
 
+![Image of drone here]()
 
+### The launch file
 
-Navigate to the package directory and make a new launch file.
+Navigate to the package directory and make a new launch file. Don't forget to [configure](https://docs.ros.org/en/humble/Tutorials/Intermediate/Launch/Launch-Main.html) `setup.py` to recognize launch, mesh, and urdf files!
 
 ```bash
 cd euroc_slam
@@ -275,7 +277,93 @@ foxglove_bridge_node = Node(
     output='screen',
 )
 ```
-In this script, we first enable the foxglove bridge that connects our ros2 nodes live to the websocket app, the the robot_state_publisher that publishes our 
+In this script, we enable the following nodes:
+
+1. The foxglove bridge to visualize all ros2 topics on the websocket app.
+2. The robot_state_publisher that publishes the URDF transformations and meshes.
+3. A static transformation connecting the drone to the SLAM localization ouput.
+4. A joint state publisher that simulates the rotors in motion. This step is purely for visual effect as the motor torques are not included in our dataset scope.
+5. RTABMAP to perform SLAM in real time as our dataset is replayed.
+
+```python
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
+
+
+def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    
+    # Generate URDF from xacro file (or read URDF file)
+    urdf_file = PathJoinSubstitution([FindPackageShare('rotors_description'), 'urdf', 'firefly.xacro'])
+    robot_description = ParameterValue(Command(['xacro ', urdf_file, ' namespace:=firefly']), value_type=str)
+
+    # Create nodes
+    foxglove_bridge_node = Node(
+        package='foxglove_bridge',
+        executable='foxglove_bridge',
+        name='foxglove_bridge',
+        output='screen',
+    )
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time, 'robot_description': robot_description}]
+    )
+
+    static_transform_publisher_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_transform_publisher',
+        output='screen',
+        arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'firefly/base_link']
+    )
+
+    firefly_state_publisher_node = Node(
+       package='rotors_description',
+       executable='firefly_state_publisher',
+       name='firefly_state_publisher',
+       output='screen'
+    )
+
+    rtabmap_include = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            FindPackageShare('rtabmap_examples'),
+            '/launch/euroc_datasets.launch.py'
+        ]),
+        launch_arguments={
+            'gt': 'false'
+        }.items()
+    )
+
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value='false',
+            description='Use simulation (Gazebo) clock if true'),
+        foxglove_bridge_node,
+        TimerAction(period=2.0, actions=[robot_state_publisher_node]),  # 2 second delay
+        TimerAction(period=4.0, actions=[static_transform_publisher_node]),  # 4 second delay
+        TimerAction(period=6.0, actions=[rtabmap_include]), 
+        # TimerAction(period=10.0, actions=[firefly_state_publisher_node]) 
+    ])
+```
+### Joint state publisher
+The `firefly_state_publisher` is used to to spin the rotors at a constant velocity during flight defined by:
+```python
+self.increment = (360.0*self.spin_rate)/loop_rate
+self.angle = ((self.angle + self.increment) % 360.0) - 180.0
+self.joint_state.position = [self.angle, -self.angle, self.angle, -self.angle, self.angle, -self.angle]
+```
+This is purely visual and can be defined based on specific motor torque values should they be available.
+
 
 
 
