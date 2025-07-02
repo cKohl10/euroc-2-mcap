@@ -27,7 +27,7 @@ Foxglove is a data visualization app that streamlines multimodal robotics workfl
  - Working ROS2 distro. Humble used in this tutorial
  - `sudo apt install ros-$ROS_DISTRO-rtabmap-ros`
  - `sudo apt install ros-$ROS_DISTRO-imu-tools`
- - `sudo apt install rosbags`
+ - `pip install rosbags`
  - `sudo apt instal ros-$ROS_DISTRO-foxglove-bridge`
 
 ## RTABMAP
@@ -127,7 +127,7 @@ The foxglove sdk requires that ros2 messages are formatted in a deliminated conc
 ### Image Writer
 We will loop through the directory of images and log them in out image channel
 ```python
-def getImageMsg(img_path: str, timestamp: int) -> Image:
+def getImageMsg(img_path: str, timestamp: int, cam_num: int) -> Image:
     # Load as grayscale image data
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
@@ -143,7 +143,7 @@ def getImageMsg(img_path: str, timestamp: int) -> Image:
     ros_image.header = Header()
     ros_image.header.stamp.sec = sec
     ros_image.header.stamp.nanosec = nsec
-    ros_image.header.frame_id = "cam0"
+    ros_image.header.frame_id = "cam"+str(cam_num)
     ros_image.height = height
     ros_image.width = width
     ros_image.encoding = "mono8" #Stereo images
