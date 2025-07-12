@@ -39,7 +39,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/firefly_purple.dae" scale="1 1 1"/>
+        <mesh filename="../meshes/firefly_purple.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -75,7 +75,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/propeller_ccw_purple.dae" scale="0.1 0.1 0.1"/>
+        <mesh filename="../meshes/propeller_ccw_purple.dae" scale="0.1 0.1 0.1"/>
         <!-- The propeller meshes have a radius of 1m -->
         <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
       </geometry>
@@ -126,7 +126,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/propeller_cw_purple.dae" scale="0.1 0.1 0.1"/>
+        <mesh filename="../meshes/propeller_cw_purple.dae" scale="0.1 0.1 0.1"/>
         <!-- The propeller meshes have a radius of 1m -->
         <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
       </geometry>
@@ -177,7 +177,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/propeller_ccw_purple.dae" scale="0.1 0.1 0.1"/>
+        <mesh filename="../meshes/propeller_ccw_purple.dae" scale="0.1 0.1 0.1"/>
         <!-- The propeller meshes have a radius of 1m -->
         <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
       </geometry>
@@ -228,7 +228,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/propeller_cw_purple.dae" scale="0.1 0.1 0.1"/>
+        <mesh filename="../meshes/propeller_cw_purple.dae" scale="0.1 0.1 0.1"/>
         <!-- The propeller meshes have a radius of 1m -->
         <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
       </geometry>
@@ -279,7 +279,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/propeller_ccw_purple.dae" scale="0.1 0.1 0.1"/>
+        <mesh filename="../meshes/propeller_ccw_purple.dae" scale="0.1 0.1 0.1"/>
         <!-- The propeller meshes have a radius of 1m -->
         <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
       </geometry>
@@ -330,7 +330,7 @@
     <visual>
       <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/propeller_cw_purple.dae" scale="0.1 0.1 0.1"/>
+        <mesh filename="../meshes/propeller_cw_purple.dae" scale="0.1 0.1 0.1"/>
         <!-- The propeller meshes have a radius of 1m -->
         <!-- <box size="${2*radius_rotor} 0.01 0.005"/> -->
       </geometry>
