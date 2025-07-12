@@ -17,7 +17,7 @@ from geometry_msgs.msg import Quaternion, Vector3
 from rclpy.serialization import serialize_message
 from pathlib import Path
 
-def getImageMsg(img_path: str, timestamp: int) -> Image:
+def getImageMsg(img_path: str, timestamp: int, cam_num: int) -> Image:
     # Load as grayscale image data
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
@@ -33,16 +33,16 @@ def getImageMsg(img_path: str, timestamp: int) -> Image:
     ros_image.header = Header()
     ros_image.header.stamp.sec = sec
     ros_image.header.stamp.nanosec = nsec
-    ros_image.header.frame_id = "cam0"
+    ros_image.header.frame_id = "cam"+str(cam_num)
     ros_image.height = height
     ros_image.width = width
-    ros_image.encoding = "mono8"
+    ros_image.encoding = "mono8" #Stereo images
     ros_image.step = width  # For mono8, 1 byte per pixel
     ros_image.data = img.tobytes()
 
     return ros_image
 
-def read_images(cam_directory, channel):
+def read_images(cam_directory, channel, cam_num):
     # Loop through the data.csv file and read in the image files
     with open(cam_directory + "/data.csv", "r") as csv_file:
         reader = csv.reader(csv_file)
@@ -56,7 +56,7 @@ def read_images(cam_directory, channel):
                 continue
 
             # Convert image to ROS2 message and write to channel
-            image_msg = getImageMsg(image_path, timestamp)
+            image_msg = getImageMsg(image_path, timestamp, cam_num)
             channel.log(serialize_message(image_msg), log_time=timestamp)
 
 def read_imu(imu_data_path, imu_channel, imu_yaml_path):
@@ -169,9 +169,9 @@ if __name__ == "__main__":
     imu_yaml_path = os.path.join(args.src, "imu0", "sensor.yaml")
 
 
-    read_images(cam0_dir, cam0_channel)
+    read_images(cam0_dir, cam0_channel, 0)
     print("Done writing cam0")
-    read_images(cam1_dir, cam1_channel)
+    read_images(cam1_dir, cam1_channel, 1)
     print("Done writing cam1")
     read_imu(imu_dir, imu_channel, imu_yaml_path)
     print("Done writing imu")
