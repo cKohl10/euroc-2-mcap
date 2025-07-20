@@ -23,17 +23,17 @@ class StatePublisher(Node):
         # message declarations
         self.base_trans = TransformStamped()
         self.base_trans.header.frame_id = 'base_link'
-        self.base_trans.child_frame_id = 'firefly/base_link'
+        self.base_trans.child_frame_id = 'firefly_base_link'
         self.joint_state = JointState()
 
         # Firefly rotor joint names (6 rotors)
         self.rotor_joint_names = [
-            'firefly/rotor_0_joint',  # front_left
-            'firefly/rotor_1_joint',  # left
-            'firefly/rotor_2_joint',  # back_left
-            'firefly/rotor_3_joint',  # back_right
-            'firefly/rotor_4_joint',  # right
-            'firefly/rotor_5_joint'   # front_right
+            'firefly_rotor_0_joint',  # front_left
+            'firefly_rotor_1_joint',  # left
+            'firefly_rotor_2_joint',  # back_left
+            'firefly_rotor_3_joint',  # back_right
+            'firefly_rotor_4_joint',  # right
+            'firefly_rotor_5_joint'   # front_right
         ]
 
         self.angle = 0.0
