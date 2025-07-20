@@ -15,12 +15,12 @@ def generate_launch_description():
     robot_description = ParameterValue(Command(['xacro ', urdf_file, ' namespace:=firefly']), value_type=str)
 
     # Create nodes
-    # foxglove_bridge_node = Node(
-    #     package='foxglove_bridge',
-    #     executable='foxglove_bridge',
-    #     name='foxglove_bridge',
-    #     output='screen',
-    # )
+    foxglove_bridge_node = Node(
+        package='foxglove_bridge',
+        executable='foxglove_bridge',
+        name='foxglove_bridge',
+        output='screen',
+    )
 
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
@@ -38,12 +38,12 @@ def generate_launch_description():
         arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'firefly/base_link']
     )
 
-   # firefly_state_publisher_node = Node(
-   #     package='rotors_description',
-   #     executable='firefly_state_publisher',
-   #     name='firefly_state_publisher',
-   #     output='screen'
-   # )
+    firefly_state_publisher_node = Node(
+       package='euroc_slam',
+       executable='firefly_state_publisher',
+       name='firefly_state_publisher',
+       output='screen'
+    )
 
     rtabmap_include = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -60,9 +60,9 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
-        # foxglove_bridge_node,
-        TimerAction(period=2.0, actions=[robot_state_publisher_node]),  # 2 second delay
-        TimerAction(period=4.0, actions=[static_transform_publisher_node]),  # 4 second delay
+        foxglove_bridge_node,
+        # TimerAction(period=2.0, actions=[robot_state_publisher_node]),  # 2 second delay
+        # TimerAction(period=4.0, actions=[static_transform_publisher_node]),  # 4 second delay
         TimerAction(period=6.0, actions=[rtabmap_include]), 
-       # TimerAction(period=10.0, actions=[firefly_state_publisher_node]) 
+        # TimerAction(period=10.0, actions=[firefly_state_publisher_node]) 
     ])
