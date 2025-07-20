@@ -8,8 +8,8 @@ class StatePublisher(Node):
     def __init__(self):
         super().__init__('firefly_state_publisher')
 
-        # Declare parameters with proper descriptions
-        self.declare_parameter("spin_rate", 2.0, "Rotation rate for the rotors in radians per second")
+        # Declare parameters
+        self.declare_parameter("spin_rate", 2.0)
         self.spin_rate = self.get_parameter("spin_rate").get_parameter_value().double_value
 
         qos_profile = QoSProfile(depth=10)
