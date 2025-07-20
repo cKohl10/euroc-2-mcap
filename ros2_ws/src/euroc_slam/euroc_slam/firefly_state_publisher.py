@@ -1,85 +1,65 @@
+#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile
 from sensor_msgs.msg import JointState
-from tf2_ros import TransformBroadcaster, TransformStamped
+import math
 
 class StatePublisher(Node):
     def __init__(self):
         super().__init__('firefly_state_publisher')
 
-        # Declare parameters
-        self.declare_parameter("spin_rate", 2.0)
-        self.spin_rate = self.get_parameter("spin_rate").get_parameter_value().double_value
+        # 1) spin_rate in revolutions per second
+        self.declare_parameter('spin_rate', 10.0)
+        self.spin_rate = self.get_parameter('spin_rate').get_parameter_value().double_value
 
-        qos_profile = QoSProfile(depth=10)
-        self.joint_pub = self.create_publisher(JointState, 'joint_states', qos_profile)
-        self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
-        self.nodeName = self.get_name()
-        self.get_logger().info("{0} started with spin_rate: {1}".format(self.nodeName, self.spin_rate))
+        # 2) We’ll update at 30 Hz
+        self.update_hz = 30.0
+        period = 1.0 / self.update_hz
 
-        self.loop_rate = self.create_rate(30)
+        # 3) Precompute angular velocity (rad/s) and per‑tick increment
+        self.ang_vel = 2 * math.pi * self.spin_rate      # rad/s
+        self.increment = self.ang_vel * period           # rad per update
 
-        # message declarations
-        self.base_trans = TransformStamped()
-        self.base_trans.header.frame_id = 'base_link'
-        self.base_trans.child_frame_id = 'firefly_base_link'
+        # 4) JointState publisher
+        self.joint_pub = self.create_publisher(JointState, 'joint_states', 10)
         self.joint_state = JointState()
-
-        # Firefly rotor joint names (6 rotors)
-        self.rotor_joint_names = [
-            'firefly_rotor_0_joint',  # front_left
-            'firefly_rotor_1_joint',  # left
-            'firefly_rotor_2_joint',  # back_left
-            'firefly_rotor_3_joint',  # back_right
-            'firefly_rotor_4_joint',  # right
-            'firefly_rotor_5_joint'   # front_right
+        self.joint_state.name = [
+            'firefly_rotor_0_joint',
+            'firefly_rotor_1_joint',
+            'firefly_rotor_2_joint',
+            'firefly_rotor_3_joint',
+            'firefly_rotor_4_joint',
+            'firefly_rotor_5_joint',
         ]
 
-        self.angle = 0.0
-        self.increment = (360.0*self.spin_rate)/30.0
+        self.angle = 0.0  # current angle in radians
 
-    def run(self):
-        try:
-            self.get_logger().info("Starting state publisher loop...")
-            while rclpy.ok():
-                # update joint_state
-                now = self.get_clock().now()
-                self.joint_state.header.stamp = now.to_msg()
-                self.joint_state.name = self.rotor_joint_names
+        # 5) Timer instead of manual loop
+        self.create_timer(period, self.timer_callback)
+        self.get_logger().info(f'StatePublisher started: spin_rate={self.spin_rate} Hz, update={self.update_hz} Hz')
 
-                # Keep the position updates if you want, but they won't affect the rotation
-                self.angle = ((self.angle + self.increment) % 360.0) - 180.0
-                self.joint_state.position = [self.angle, -self.angle, self.angle, -self.angle, self.angle, -self.angle]
-                
-                # Set a constant rotational velocity (radians/sec)
-                self.joint_state.velocity = [self.spin_rate] * len(self.rotor_joint_names)  # Try different values to adjust speed
-                # joint_state.effort = [2.0] * len(rotor_joint_names)
+    def timer_callback(self):
+        # advance angle and wrap to [0, 2π)
+        self.angle = (self.angle + self.increment) % (2 * math.pi)
 
-                # Update transform timestamp
-                self.base_trans.header.stamp = now.to_msg()
+        # stamp and publish
+        now = self.get_clock().now().to_msg()
+        self.joint_state.header.stamp = now
 
-                # send the joint state and transform
-                self.joint_pub.publish(self.joint_state)
-                self.broadcaster.sendTransform(self.base_trans)
+        # alternate spin direction on adjacent rotors
+        positions = []
+        for i in range(len(self.joint_state.name)):
+            sign = 1.0 if (i % 2 == 0) else -1.0
+            positions.append(sign * self.angle)
+        self.joint_state.position = positions
 
-                # This will adjust as needed per iteration
-                self.loop_rate.sleep()
+        self.joint_pub.publish(self.joint_state)
 
-        except KeyboardInterrupt:
-            self.get_logger().info("Received keyboard interrupt, shutting down...")
-        except Exception as e:
-            self.get_logger().error(f"Error in run loop: {str(e)}")
-            raise
-
-def main():
-    rclpy.init()
+def main(args=None):
+    rclpy.init(args=args)
     node = StatePublisher()
-    
     try:
-        node.run()
-    except Exception as e:
-        node.get_logger().error(f'Error in state publisher: {str(e)}')
+        rclpy.spin(node)
     finally:
         node.destroy_node()
         rclpy.shutdown()

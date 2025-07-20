@@ -20,7 +20,6 @@ setup(
     zip_safe=True,
     maintainer='Foxglove',
     license='Apache-2.0',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'firefly_state_publisher = euroc_slam.firefly_state_publisher:main',

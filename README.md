@@ -29,7 +29,7 @@ pip install foxglove-sdk numpy opencv-python pyyaml
 ```
 3. Convert the dataset to MCAP
 ```bash
-python3 convert-euro-2-mcap.py --src <dataset_dir> --dst <mcap_output_location>.mcap
+python3 convert-euroc-2-mcap.py --src <dataset_dir> --dst <mcap_output_location>.mcap
 ```
 4. Build the ROS 2 package called euroc_slam
 ```bash
