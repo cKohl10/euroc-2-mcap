@@ -1,4 +1,3 @@
-from math import sin, cos, pi
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
@@ -9,14 +8,15 @@ class StatePublisher(Node):
     def __init__(self):
         super().__init__('firefly_state_publisher')
 
-        self.declare_parameter("spin_rate", 2.0)
+        # Declare parameters with proper descriptions
+        self.declare_parameter("spin_rate", 2.0, "Rotation rate for the rotors in radians per second")
         self.spin_rate = self.get_parameter("spin_rate").get_parameter_value().double_value
 
         qos_profile = QoSProfile(depth=10)
         self.joint_pub = self.create_publisher(JointState, 'joint_states', qos_profile)
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
         self.nodeName = self.get_name()
-        self.get_logger().info("{0} started".format(self.nodeName))
+        self.get_logger().info("{0} started with spin_rate: {1}".format(self.nodeName, self.spin_rate))
 
         self.loop_rate = self.create_rate(30)
 
@@ -41,9 +41,8 @@ class StatePublisher(Node):
 
     def run(self):
         try:
+            self.get_logger().info("Starting state publisher loop...")
             while rclpy.ok():
-                rclpy.spin_once(self)
-
                 # update joint_state
                 now = self.get_clock().now()
                 self.joint_state.header.stamp = now.to_msg()
@@ -57,6 +56,9 @@ class StatePublisher(Node):
                 self.joint_state.velocity = [self.spin_rate] * len(self.rotor_joint_names)  # Try different values to adjust speed
                 # joint_state.effort = [2.0] * len(rotor_joint_names)
 
+                # Update transform timestamp
+                self.base_trans.header.stamp = now.to_msg()
+
                 # send the joint state and transform
                 self.joint_pub.publish(self.joint_state)
                 self.broadcaster.sendTransform(self.base_trans)
@@ -65,7 +67,10 @@ class StatePublisher(Node):
                 self.loop_rate.sleep()
 
         except KeyboardInterrupt:
-            pass
+            self.get_logger().info("Received keyboard interrupt, shutting down...")
+        except Exception as e:
+            self.get_logger().error(f"Error in run loop: {str(e)}")
+            raise
 
 def main():
     rclpy.init()

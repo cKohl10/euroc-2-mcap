@@ -10,9 +10,9 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     
-    # Generate URDF from xacro file (or read URDF file)
-    urdf_file = PathJoinSubstitution([FindPackageShare('euroc_slam'), 'urdf', 'firefly.xacro'])
-    robot_description = ParameterValue(Command(['xacro ', urdf_file, ' namespace:=firefly']), value_type=str)
+    # Load URDF file
+    urdf_file = PathJoinSubstitution([FindPackageShare('euroc_slam'), 'urdf', 'firefly.urdf'])
+    robot_description = ParameterValue(Command(['cat ', urdf_file]), value_type=str)
 
     # Create nodes
     foxglove_bridge_node = Node(
@@ -35,7 +35,7 @@ def generate_launch_description():
         executable='static_transform_publisher',
         name='static_transform_publisher',
         output='screen',
-        arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'firefly/base_link']
+        arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'firefly_base_link']
     )
 
     firefly_state_publisher_node = Node(
@@ -62,7 +62,7 @@ def generate_launch_description():
             description='Use simulation (Gazebo) clock if true'),
         foxglove_bridge_node,
         TimerAction(period=1.0, actions=[robot_state_publisher_node]),  # 2 second delay
-        TimerAction(period=2.0, actions=[static_transform_publisher_node]),  # 4 second delay
-        TimerAction(period=3.0, actions=[rtabmap_include]), 
-        TimerAction(period=8.0, actions=[firefly_state_publisher_node]) 
+        TimerAction(period=2.0, actions=[rtabmap_include]), 
+        TimerAction(period=3.0, actions=[firefly_state_publisher_node]),
+        TimerAction(period=4.0, actions=[static_transform_publisher_node])
     ])
