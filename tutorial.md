@@ -3,25 +3,25 @@ Foxglove is a data visualization app that uses the universal [MCAP](https://mcap
 
 In this tutorial, we will demonstrate how to convert the [EuRoC MAV](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets) dataset into MCAP format and visualize it using Foxglove.
 
-![Drone Snapshot](imgs/slam_snapshot.png)
+![Drone Snapshot](media/slam_snapshot.png)
 
 <!-- omit in toc -->
 ## Table of Contents
 - [Visualizing SLAM using Foxglove](#visualizing-slam-using-foxglove)
-  - [Step 1: Install Dependencies](#step-1-install-dependencies)
-  - [Step 2: Convert to MCAP](#step-2-convert-to-mcap)
-      - [Option 1: Your SLAM dataset is a directory of files.](#option-1-your-slam-dataset-is-a-directory-of-files)
-      - [Option 2: Your SLAM dataset is a ROS bag.](#option-2-your-slam-dataset-is-a-ros-bag)
-  - [Step 3: Visualize the Data](#step-3-visualize-the-data)
+    - [Step 1: Install Dependencies](#step-1-install-dependencies)
+    - [Step 2: Convert to MCAP](#step-2-convert-to-mcap)
+        - [Option 1: Your SLAM dataset is a directory of files.](#option-1-your-slam-dataset-is-a-directory-of-files)
+        - [Option 2: Your SLAM dataset is a ROS bag.](#option-2-your-slam-dataset-is-a-ros-bag)
+    - [Step 3: Visualize the Data](#step-3-visualize-the-data)
 - [Deep Dive: Converting Multimodal Data to MCAP using Foxglove SDK](#deep-dive-converting-multimodal-data-to-mcap-using-foxglove-sdk)
-    - [Defining Message Schemas](#defining-message-schemas)
-    - [The Image Message](#the-image-message)
-    - [The IMU Message](#the-imu-message)
+    - [Defining Message Schemas](#defining-message-schemas)
+    - [The Image Message](#the-image-message)
+    - [The IMU Message](#the-imu-message)
 - [Where is the Drone? Enhance your Visualization with a URDF](#where-is-the-drone-enhance-your-visualization-with-a-urdf)
-    - [The Drone URDF](#the-drone-urdf)
-    - [The Launch File](#the-launch-file)
-    - [The Joint State Publisher](#the-joint-state-publisher)
-  - [Visualize the Data](#visualize-the-data)
+    - [The Drone URDF](#the-drone-urdf)
+    - [The Launch File](#the-launch-file)
+    - [The Joint State Publisher](#the-joint-state-publisher)
+- [Visualize the Data](#visualize-the-data)
 
 
 ## Step 1: Install Dependencies
@@ -93,7 +93,7 @@ ros2 bag record -s mcap --all
 ```
 Finally, either watch the drone perform SLAM live by connecting to the [Foxglove Websocket](https://app.foxglove.dev) in your browser or import the new MCAP directly to Foxglove!
 
-![No Drone Image](imgs/no_drone_slam.png)
+![No Drone Image](media/no_drone_slam.png)
 
 # Deep Dive: Converting Multimodal Data to MCAP using Foxglove SDK
 In this section, we will explore how the Foxglove SDK was used to create a custom MCAP conversion script that is compatible with ROS 2 listeners. Please refer to the <span style="color: red;">TODO-></span>[full script](https://github.com/cKohl10/euroc-2-mcap/blob/main/convert-euroc-2-mcap.py) script while following along.
@@ -266,7 +266,7 @@ ros2 pkg create --build-type ament_python --license Apache-2.0 euroc_slam
 
 The EuRoC dataset was recorded on an Asctec Firefly drone, and its URDF model is included in the open-source [RotorS](https://github.com/ethz-asl/rotors_simulator) project for ROS 1. The exact URDF files and meshes for the Firefly can be downloaded <span style="color: red;">TODO-></span>[here](https://github.com/cKohl10/euroc-2-mcap/tree/main/euroc_slam).
 
-![dorne_img](imgs/model.png)
+![dorne_img](media/model.png)
 
 ### The Launch File
 
@@ -389,7 +389,7 @@ ros2 bag record -s mcap --all
 ```
 Open Foxglove and watch SLAM happen live, or load the generated MCAP file!
 
-![Finalviz](imgs/MH01_Final_gif_cut.gif)
+![Finalviz](media/MH01_Final_gif_cut.gif)
 
 Watch a short demo on <span style="color: red;">TODO-></span>[Youtube]().
 

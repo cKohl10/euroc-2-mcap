@@ -4,6 +4,7 @@
   <name>euroc_slam</name>
   <version>0.0.0</version>
   <description>Convert the EuRoC MAV dataset to MCAP</description>
+  <maintainer email="carson@foxglove.dev">Carson Kohlbrenner</maintainer>
   <license>Apache-2.0</license>
 
   <test_depend>ament_copyright</test_depend>
