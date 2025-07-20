@@ -23,13 +23,13 @@
   limitations under the License.
 -->
 <robot name="firefly">
-  <link name="firefly_base_link"/>
-  <joint name="firefly_base_joint" type="fixed">
+  <link name="firefly/base_link"/>
+  <joint name="firefly/base_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="firefly_base_link"/>
-    <child link="firefly_base_link_inertia"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/base_link_inertia"/>
   </joint>
-  <link name="firefly_base_link_inertia">
+  <link name="firefly/base_link_inertia">
     <inertial>
       <mass value="1.5"/>
       <!-- [kg] -->
@@ -54,19 +54,19 @@
   <gazebo>
     <plugin filename="librotors_gazebo_multirotor_base_plugin.so" name="multirotor_base_plugin">
       <robotNamespace>firefly</robotNamespace>
-      <linkName>firefly_base_link</linkName>
+      <linkName>firefly/base_link</linkName>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <joint name="firefly_rotor_0_joint" type="continuous">
+  <joint name="firefly/rotor_0_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.18619546181355998 0.1075 0.037"/>
     <axis xyz="0 0 1"/>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
-    <parent link="firefly_base_link"/>
-    <child link="firefly_rotor_0"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/rotor_0"/>
   </joint>
-  <link name="firefly_rotor_0">
+  <link name="firefly/rotor_0">
     <inertial>
       <mass value="0.005"/>
       <!-- [kg] -->
@@ -90,8 +90,8 @@
   <gazebo>
     <plugin filename="librotors_gazebo_motor_model.so" name="firefly_front_left_motor_model">
       <robotNamespace>firefly</robotNamespace>
-      <jointName>firefly_rotor_0_joint</jointName>
-      <linkName>firefly_rotor_0</linkName>
+      <jointName>firefly/rotor_0_joint</jointName>
+      <linkName>firefly/rotor_0</linkName>
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
@@ -106,18 +106,18 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <gazebo reference="firefly_rotor_0">
+  <gazebo reference="firefly/rotor_0">
     <material>Gazebo/Red</material>
   </gazebo>
-  <joint name="firefly_rotor_1_joint" type="continuous">
+  <joint name="firefly/rotor_1_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0 0.215 0.037"/>
     <axis xyz="0 0 1"/>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
-    <parent link="firefly_base_link"/>
-    <child link="firefly_rotor_1"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/rotor_1"/>
   </joint>
-  <link name="firefly_rotor_1">
+  <link name="firefly/rotor_1">
     <inertial>
       <mass value="0.005"/>
       <!-- [kg] -->
@@ -141,8 +141,8 @@
   <gazebo>
     <plugin filename="librotors_gazebo_motor_model.so" name="firefly_left_motor_model">
       <robotNamespace>firefly</robotNamespace>
-      <jointName>firefly_rotor_1_joint</jointName>
-      <linkName>firefly_rotor_1</linkName>
+      <jointName>firefly/rotor_1_joint</jointName>
+      <linkName>firefly/rotor_1</linkName>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
@@ -157,18 +157,18 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <gazebo reference="firefly_rotor_1">
+  <gazebo reference="firefly/rotor_1">
     <material>Gazebo/Blue</material>
   </gazebo>
-  <joint name="firefly_rotor_2_joint" type="continuous">
+  <joint name="firefly/rotor_2_joint" type="continuous">
     <origin rpy="0 0 0" xyz="-0.18619546181355998 0.1075 0.037"/>
     <axis xyz="0 0 1"/>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
-    <parent link="firefly_base_link"/>
-    <child link="firefly_rotor_2"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/rotor_2"/>
   </joint>
-  <link name="firefly_rotor_2">
+  <link name="firefly/rotor_2">
     <inertial>
       <mass value="0.005"/>
       <!-- [kg] -->
@@ -192,8 +192,8 @@
   <gazebo>
     <plugin filename="librotors_gazebo_motor_model.so" name="firefly_back_left_motor_model">
       <robotNamespace>firefly</robotNamespace>
-      <jointName>firefly_rotor_2_joint</jointName>
-      <linkName>firefly_rotor_2</linkName>
+      <jointName>firefly/rotor_2_joint</jointName>
+      <linkName>firefly/rotor_2</linkName>
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
@@ -208,18 +208,18 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <gazebo reference="firefly_rotor_2">
+  <gazebo reference="firefly/rotor_2">
     <material>Gazebo/Blue</material>
   </gazebo>
-  <joint name="firefly_rotor_3_joint" type="continuous">
+  <joint name="firefly/rotor_3_joint" type="continuous">
     <origin rpy="0 0 0" xyz="-0.18619546181355998 -0.1075 0.037"/>
     <axis xyz="0 0 1"/>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
-    <parent link="firefly_base_link"/>
-    <child link="firefly_rotor_3"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/rotor_3"/>
   </joint>
-  <link name="firefly_rotor_3">
+  <link name="firefly/rotor_3">
     <inertial>
       <mass value="0.005"/>
       <!-- [kg] -->
@@ -243,8 +243,8 @@
   <gazebo>
     <plugin filename="librotors_gazebo_motor_model.so" name="firefly_back_right_motor_model">
       <robotNamespace>firefly</robotNamespace>
-      <jointName>firefly_rotor_3_joint</jointName>
-      <linkName>firefly_rotor_3</linkName>
+      <jointName>firefly/rotor_3_joint</jointName>
+      <linkName>firefly/rotor_3</linkName>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
@@ -259,18 +259,18 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <gazebo reference="firefly_rotor_3">
+  <gazebo reference="firefly/rotor_3">
     <material>Gazebo/Blue</material>
   </gazebo>
-  <joint name="firefly_rotor_4_joint" type="continuous">
+  <joint name="firefly/rotor_4_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0 -0.215 0.037"/>
     <axis xyz="0 0 1"/>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
-    <parent link="firefly_base_link"/>
-    <child link="firefly_rotor_4"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/rotor_4"/>
   </joint>
-  <link name="firefly_rotor_4">
+  <link name="firefly/rotor_4">
     <inertial>
       <mass value="0.005"/>
       <!-- [kg] -->
@@ -294,8 +294,8 @@
   <gazebo>
     <plugin filename="librotors_gazebo_motor_model.so" name="firefly_right_motor_model">
       <robotNamespace>firefly</robotNamespace>
-      <jointName>firefly_rotor_4_joint</jointName>
-      <linkName>firefly_rotor_4</linkName>
+      <jointName>firefly/rotor_4_joint</jointName>
+      <linkName>firefly/rotor_4</linkName>
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
@@ -310,18 +310,18 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <gazebo reference="firefly_rotor_4">
+  <gazebo reference="firefly/rotor_4">
     <material>Gazebo/Blue</material>
   </gazebo>
-  <joint name="firefly_rotor_5_joint" type="continuous">
+  <joint name="firefly/rotor_5_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.18619546181355998 -0.1075 0.037"/>
     <axis xyz="0 0 1"/>
     <!-- TODO(ff): not currently set because it's not yet supported -->
     <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
-    <parent link="firefly_base_link"/>
-    <child link="firefly_rotor_5"/>
+    <parent link="firefly/base_link"/>
+    <child link="firefly/rotor_5"/>
   </joint>
-  <link name="firefly_rotor_5">
+  <link name="firefly/rotor_5">
     <inertial>
       <mass value="0.005"/>
       <!-- [kg] -->
@@ -345,8 +345,8 @@
   <gazebo>
     <plugin filename="librotors_gazebo_motor_model.so" name="firefly_front_right_motor_model">
       <robotNamespace>firefly</robotNamespace>
-      <jointName>firefly_rotor_5_joint</jointName>
-      <linkName>firefly_rotor_5</linkName>
+      <jointName>firefly/rotor_5_joint</jointName>
+      <linkName>firefly/rotor_5</linkName>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
@@ -361,7 +361,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
   </gazebo>
-  <gazebo reference="firefly_rotor_5">
+  <gazebo reference="firefly/rotor_5">
     <material>Gazebo/Red</material>
   </gazebo>
 </robot>
